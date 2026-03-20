@@ -9,6 +9,8 @@ interface PersonaSidebarProps {
   onSelect: (persona: Persona) => void
   onDelete: (id: string) => void
   onClickAdd: () => void
+  isOpen: boolean
+  onClose: () => void
 }
 
 export default function PersonaSidebar({
@@ -17,6 +19,8 @@ export default function PersonaSidebar({
   onSelect,
   onDelete,
   onClickAdd,
+  isOpen,
+  onClose,
 }: PersonaSidebarProps) {
   const builtinPersonas = personas.filter((p) => p.isBuiltin)
   const customPersonas = personas.filter((p) => !p.isBuiltin)
