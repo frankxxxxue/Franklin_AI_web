@@ -7,7 +7,7 @@ import MessageInput from '@/components/MessageInput'
 import ThemeToggle from '@/components/ThemeToggle'
 import PersonaSidebar from '@/components/PersonaSidebar'
 import CreatePersonaModal from '@/components/CreatePersonaModal'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Menu } from 'lucide-react'
 
 const CONTEXT_SIZE = 5
 
@@ -52,6 +52,7 @@ export default function Home() {
   const [customPersonas, setCustomPersonas] = useState<Persona[]>([])
   const [activePersona, setActivePersona] = useState<Persona>(BUILTIN_PERSONAS[0])
   const [showModal, setShowModal] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // 从 localStorage 加载自定义角色
   useEffect(() => {
@@ -200,6 +201,8 @@ export default function Home() {
         onSelect={handleSelectPersona}
         onDelete={handleDeletePersona}
         onClickAdd={() => setShowModal(true)}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
       {/* 主区域 */}
@@ -207,6 +210,13 @@ export default function Home() {
         {/* 顶栏 */}
         <header className="flex items-center justify-between px-4 h-14 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 flex-shrink-0">
           <div className="flex items-center gap-2">
+            {/* 手机端汉堡菜单按钮 */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <Menu size={18} />
+            </button>
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold">
               F
             </div>

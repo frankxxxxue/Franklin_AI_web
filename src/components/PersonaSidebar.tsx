@@ -21,53 +21,76 @@ export default function PersonaSidebar({
   const builtinPersonas = personas.filter((p) => p.isBuiltin)
   const customPersonas = personas.filter((p) => !p.isBuiltin)
 
+  const handleSelect = (persona: Persona) => {
+    onSelect(persona)
+    onClose() // 手机端选完角色自动关闭抽屉
+  }
+
   return (
-    <aside className="w-52 flex-shrink-0 flex flex-col h-full bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
-      <div className="px-4 py-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-        角色
-      </div>
+    <>
+      {/* 手机端遮罩层 */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/40 md:hidden"
+          onClick={onClose}
+        />
+      )}
 
-      {/* 内置角色 */}
-      <div className="flex-1 overflow-y-auto px-2 space-y-1">
-        {builtinPersonas.map((persona) => (
-          <PersonaItem
-            key={persona.id}
-            persona={persona}
-            isActive={activePersona.id === persona.id}
-            onSelect={onSelect}
-          />
-        ))}
+      {/* 侧边栏主体 */}
+      <aside
+        className={`
+          fixed top-0 left-0 z-30 h-full w-52 flex flex-col
+          bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700
+          transition-transform duration-300
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          md:relative md:translate-x-0 md:flex md:flex-shrink-0
+        `}
+      >
+        <div className="px-4 py-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+          角色
+        </div>
 
-        {/* 自定义角色 */}
-        {customPersonas.length > 0 && (
-          <>
-            <div className="px-2 pt-3 pb-1 text-xs text-gray-400 dark:text-gray-500">
-              自定义
-            </div>
-            {customPersonas.map((persona) => (
-              <PersonaItem
-                key={persona.id}
-                persona={persona}
-                isActive={activePersona.id === persona.id}
-                onSelect={onSelect}
-                onDelete={onDelete}
-              />
-            ))}
-          </>
-        )}
-      </div>
+        {/* 角色列表 */}
+        <div className="flex-1 overflow-y-auto px-2 space-y-1">
+          {builtinPersonas.map((persona) => (
+            <PersonaItem
+              key={persona.id}
+              persona={persona}
+              isActive={activePersona.id === persona.id}
+              onSelect={handleSelect}
+            />
+          ))}
 
-      {/* 新建角色按钮 */}
-      <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-        <button
-          onClick={onClickAdd}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        >
-          <span className="text-lg leading-none">+</span>
-          <span>新建角色</span>
-        </button>
-      </div>
-    </aside>
+          {customPersonas.length > 0 && (
+            <>
+              <div className="px-2 pt-3 pb-1 text-xs text-gray-400 dark:text-gray-500">
+                自定义
+              </div>
+              {customPersonas.map((persona) => (
+                <PersonaItem
+                  key={persona.id}
+                  persona={persona}
+                  isActive={activePersona.id === persona.id}
+                  onSelect={handleSelect}
+                  onDelete={onDelete}
+                />
+              ))}
+            </>
+          )}
+        </div>
+
+        {/* 新建角色按钮 */}
+        <div className="p-2 border-t border-gray-200 dark:border-gray-700">
+          <button
+            onClick={onClickAdd}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            <span className="text-lg leading-none">+</span>
+            <span>新建角色</span>
+          </button>
+        </div>
+      </aside>
+    </>
   )
 }
 
