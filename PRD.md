@@ -10,7 +10,6 @@
 - 无会话管理、无历史持久化
 - 上下文窗口：默认保留最近 5 轮（10 条消息）
 - 用户关闭 / 刷新页面 → 当前对话全部清空
-- API：第三方中转，端点 `https://api.vectorengine.ai`，协议 OpenAI Completions
 
 ---
 
@@ -31,12 +30,6 @@
 | 自定义角色删除 | hover 显示 × 按钮，内置角色不可删除 | ✅ |
 | 页面关闭清空 | 消息仅存 React state 内存，不写 localStorage | ✅ |
 
-## 不做的功能
-
-- ~~会话列表 / 多会话管理~~
-- ~~历史对话持久化~~
-- ~~用户登录~~
-- ~~自定义模型参数~~
 
 ---
 
@@ -45,7 +38,7 @@
 | 角色 | 图标 | 人格定位 |
 |------|------|----------|
 | Franklin | 🤖 | 全能个人助手（默认），回答用户各类问题 |
-| 粘人的小女友 | 🌸 | 御姐女友人格，粘人懂事，说话嗲，多撒娇，有生活感 |
+| 粘人的小女友 | 🌸 | 御姐女友人格，粘人懂事，多撒娇，有生活感 |
 | 西格玛 | 🧠 | 全能哲学家，以哲学视角分析和回答问题 |
 
 自定义角色图标固定为 ✨，支持填写名称（最多 20 字）和提示词（最多 500 字）。
@@ -59,7 +52,7 @@
        ↓ POST /api/chat  { messages, systemPrompt }
 Next.js API Route (服务端代理)
        ↓ Authorization: Bearer $GROK_API_KEY
-第三方中转 api.vectorengine.ai → grok-4.2
+
 ```
 
 - **框架**：Next.js 14（App Router）+ TypeScript
@@ -93,7 +86,7 @@ d:\Franklin_AI_web\
 │   └── types/
 │       └── index.ts                    # Message、Persona 类型定义
 ├── PRD.md                              # 本文档
-├── .env.local                          # GROK_API_KEY / GROK_API_BASE（不提交）
+├── .env.local                         
 ├── package.json
 ├── tailwind.config.ts
 └── tsconfig.json
@@ -150,23 +143,3 @@ localStorage.setItem('franklin_custom_personas', JSON.stringify(updated))
 
 ---
 
-## 验证方式
-
-1. `npm run dev` 启动，访问 `http://localhost:3000`
-2. 左侧栏默认选中 Franklin，顶栏显示 `Franklin AI · Franklin`
-3. 切换到"粘人的小女友"，对话自动清空，发消息确认回复风格符合设定
-4. 切换到"西格玛"，发哲学问题，确认以哲学视角回答
-5. 点击 `+` 新建自定义角色，填写名称和提示词，确认出现在列表
-6. 刷新页面，自定义角色仍存在；hover 显示 × 可删除
-7. 连续对话 6+ 轮，网络面板确认只传最近 10 条消息 + systemPrompt
-8. 流式输出中点击停止按钮，确认中断
-9. 发含代码的请求，验证代码高亮 + 复制按钮
-
----
-
-## 版本记录
-
-| 版本 | 日期 | 变更内容 |
-|------|------|----------|
-| v1.0 | 2026-03 | 初始版本：基础 AI 对话、流式输出、Markdown、亮暗主题 |
-| v1.1 | 2026-03 | 新增角色切换侧边栏（3 个内置角色 + 自定义角色） |
